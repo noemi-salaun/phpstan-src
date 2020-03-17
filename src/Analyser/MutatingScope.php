@@ -489,7 +489,8 @@ class MutatingScope implements Scope
 					$variableType = $this->resolveType($var);
 					$isNullSuperType = (new NullType())->isSuperTypeOf($variableType);
 					$has = $this->hasVariableType($var->name);
-					if ($has->no() || $isNullSuperType->yes()) {
+					$isInGlobalScope = (null === $this->getFunction()) && !$this->isInAnonymousFunction();
+					if ((!$isInGlobalScope && $has->no()) || $isNullSuperType->yes()) {
 						return new ConstantBooleanType(false);
 					}
 
